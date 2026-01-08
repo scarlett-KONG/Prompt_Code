@@ -745,15 +745,17 @@ def train(args):
     val_file = os.path.join(args.data_root, "problems_dev.json")
 
     print(f"\nLoading data...")
-    if args.train_num and args.train_num >0:
-        train_problems = json.load(open(train_file))
+    train_problems = json.load(open(train_file))
+    if args.train_num and args.train_num > 0:
         keys = list(train_problems.keys())[: args.train_num]
         train_problems = {k: train_problems[k] for k in keys}
-        print(f"Using first {len(train_problems)} train examples")
-    else:
-        train_problems = json.load(open(train_file))
+        print(f"Using first {len(train_problems)} train examples (train_num={args.train_num})")
 
     val_problems = json.load(open(val_file))
+    if args.val_num and args.val_num > 0:
+        val_keys = list(val_problems.keys())[: args.val_num]
+        val_problems = {k: val_problems[k] for k in val_keys}
+        print(f"Using first {len(val_problems)} val examples (val_num={args.val_num})")
 
     print(f"\nCreating training dataset...")
     train_dataset = TapexBestPracticesDataset(
@@ -903,7 +905,18 @@ def parse_args():
     parser.add_argument("--data_root", type=str, default="../data/tabmwp")
     parser.add_argument("--output", type=str, default="../saved_models/tapex_best")
     parser.add_argument("--result_root", type=str, default="../results/tapex_best")
-    parser.add_argument("--train_num", type=int, default=-1,help="Use only first N train examples; -1 = all")
+    parser.add_argument(
+        "--train_num",
+        type=int,
+        default=-1,
+        help="Use only first N train examples; -1 = all",
+    )
+    parser.add_argument(
+        "--val_num",
+        type=int,
+        default=-1,
+        help="Use only first N validation examples; -1 = all",
+    )
     # Model
     parser.add_argument(
         "--model",
