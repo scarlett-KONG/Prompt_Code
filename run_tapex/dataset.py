@@ -59,6 +59,16 @@ class TMQADataset(torch.utils.data.Dataset):
         # load the data entries/annotations
         self.entries = _load_dataset(data_root, data_split, self.option_inds)
 
+        # optionally subsample for quick experiments
+        if hasattr(args, "train_num") and args.train_num > 0 and data_split == args.train_split:
+            limit = min(len(self.entries), args.train_num)
+            self.entries = self.entries[:limit]
+            print(f"Subsampled {data_split} split to {limit} examples (train_num).")
+        elif hasattr(args, "val_num") and args.val_num > 0 and data_split == args.val_split:
+            limit = min(len(self.entries), args.val_num)
+            self.entries = self.entries[:limit]
+            print(f"Subsampled {data_split} split to {limit} examples (val_num).")
+
     def __len__(self):
         return len(self.entries)
 

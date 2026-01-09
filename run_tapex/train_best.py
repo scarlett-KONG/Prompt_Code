@@ -460,14 +460,14 @@ def extract_prediction(output: str, options: List[str]):
 def normalize_answer(text: str, unit: str) -> str:
     import re
 
-    text = re.sub("^[\$]", "", text)
-    text = re.sub("[\\,\\.\\,\\/]$", "", text)
+    text = re.sub(r"^\$", "", text)
+    text = re.sub(r"[,\./]$", "", text)
 
-    result = re.match("^[-+]?[\d,./]+$", text)
+    result = re.match(r"^[-+]?[\d,./]+$", text)
 
     if result is not None:
         text = text.replace(",", "")
-        result = re.match("[-+]?\\d+$", text)
+        result = re.match(r"[-+]?\d+$", text)
 
         if result is not None:
             number = int(text)

@@ -63,6 +63,8 @@ def parse_args():
     parser.add_argument('--lr', type=float, default=5e-5)
     parser.add_argument('--seed', type=int, default=1111, help='random seed')
     parser.add_argument('--save_all', action='store_true', help='save all model checkpoints or not')
+    parser.add_argument('--train_num', type=int, default=-1, help='number of training samples to use; -1 for all')
+    parser.add_argument('--val_num', type=int, default=-1, help='number of validation samples to use; -1 for all')
     # input and output
     parser.add_argument('--data_root', type=str, default='../data/tabmwp')
     parser.add_argument('--output', type=str, default='../saved_models/tapex')
